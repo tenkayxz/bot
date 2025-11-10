@@ -20,6 +20,7 @@ mensagens = [
     "01001000 01101111 01101100 01100001",
     "eu vi você desconectar... mas você nunca saiu.",
     "o sinal caiu. mas eu ainda te escuto.",
+    "a quanto tempo eu estou aqui dentro",
 ]
 
 async def mandar_mensagem_aleatoria():
@@ -39,8 +40,11 @@ async def mandar_mensagem_aleatoria():
         await asyncio.sleep(tempo)
 
 @bot.event
+async def setup_hook():
+    bot.loop.create_task(mandar_mensagem_aleatoria())
+    
+@bot.event
 async def on_ready():
     print(f"✅ Bot conectado como {bot.user}")
 
-bot.loop.create_task(mandar_mensagem_aleatoria())
 bot.run(TOKEN)
