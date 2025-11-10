@@ -1,4 +1,3 @@
-
 import discord
 import os
 import asyncio
@@ -23,28 +22,29 @@ mensagens = [
     "a quanto tempo eu estou aqui dentro",
 ]
 
+
 async def mandar_mensagem_aleatoria():
     await bot.wait_until_ready()
-    canal_id = int(os.getenv("DISCORD_CHANNEL_ID"))  # Canal onde vai enviar
+    canal_id = int(os.getenv("DISCORD_CHANNEL_ID"))
     canal = bot.get_channel(canal_id)
 
     if not canal:
-        print("Canal não encontrado. Verifique o ID.")
+        print("❌ ERRO: Canal não encontrado. Verifique o ID.")
         return
 
-    while not bot.is_closed():
-        mensagem = random.choice(mensagens)
-        await canal.send(mensagem)
+    while True:
+        await canal.send(random.choice(mensagens))
+        await asyncio.sleep(random.randint(1800, 10800))  # 30 min a 3h
 
-        tempo = random.randint(1800, 10800)  # entre 30 min e 3h
-        await asyncio.sleep(tempo)
 
 @bot.event
 async def setup_hook():
-    bot.loop.create_task(mandar_mensagem_aleatoria())
-    
+    asyncio.create_task(mandar_mensagem_aleatoria())  # ✅ sem bot.loop
+
+
 @bot.event
 async def on_ready():
     print(f"✅ Bot conectado como {bot.user}")
+
 
 bot.run(TOKEN)
